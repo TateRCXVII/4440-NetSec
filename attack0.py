@@ -57,6 +57,5 @@ def parsePacket(packet):
                 tcp_streams[tcp_stream_key] = lines[-1]
 
 if __name__ == "__main__":
-    print('Analyzing packets...')
     for packet in rdpcap(sys.argv[1]):
         parsePacket(packet)
