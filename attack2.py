@@ -2,7 +2,6 @@
 
 import logging
 import sys
-import base64
 from scapy.all import *
 
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
@@ -15,12 +14,13 @@ def parsePacket(packet):
     if b'HTTP' not in packet["Raw"].load or b'GET' not in packet["Raw"].load:
         return
 
-    cred = packet["Raw"].load.split(b'Authorization: Basic ')[1].split(b'\r\n')[0]
-    cred_decoded = base64.b64decode(cred).decode()
-    username = cred_decoded.split(':')[0]
-    password = cred_decoded.split(':')[1]
-    print("USERNAME:" + username + ", PASSWORD:" + password)
-    
+    # Retrieve the HTTP GET request
+    request = packet["Raw"].load    
+    host = request.split(b"Host: ")[1].split(b"\r\n")[0].decode()
+    path = request.split(b"GET ")[1].split(b" HTTP")[0].decode()
+    # Print in required format
+    print("URL:" + host+path)
+
 if __name__ == "__main__":
     for packet in rdpcap(sys.argv[1]):
         parsePacket(packet)
