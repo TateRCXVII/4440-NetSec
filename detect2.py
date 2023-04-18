@@ -30,7 +30,6 @@ def parsePacket(packet):
         synack_packets[ip_layer.dst] = synack_packets.get(ip_layer.dst, 0) + 1
 
 if __name__ == "__main__":
-    print('Analyzing packets...')
     # Read the pcap file and parse each packet using the parsePacket function
     for packet in rdpcap(sys.argv[1]):
         parsePacket(packet)
